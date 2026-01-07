@@ -1,0 +1,24 @@
+[구현 내용 요약: DDD 구조 및 Hello World API]
+
+1. 프로젝트 아키텍처 수립 (DDD)
+   - domain: CounselMessage(모델), CounselRepository(인터페이스)
+   - application: CounselService (비즈니스 로직)
+   - interfaces: CounselController (API 엔드포인트)
+   - infrastructure: CounselMapper (MyBatis 구현체)
+
+2. 의존성 역전 원칙(DIP) 적용
+   - Service가 기술(MyBatis)을 직접 의존하지 않고 Domain의 Repository 인터페이스를 의존하도록 설계
+   - CounselMapper가 CounselRepository를 상속받아 구현함으로써 계층 간 결합도 완화
+
+3. 데이터베이스 연동 (PostgreSQL)
+   - Docker Compose를 통해 DB 서버 기동
+   - counsels 테이블 생성 및 테스트 데이터("Hello from the REAL database table!") 삽입
+   - MyBatis @Select 어노테이션을 이용한 실제 데이터 조회 구현
+
+4. 서버 환경 설정
+   - 포트 충돌 방지를 위해 서버 포트를 8099로 설정
+   - MyBatis 타입 알리아스 패키지 설정 최적화
+
+5. 형상 관리
+   - Git 초기화 및 첫 커밋 완료
+   - GitHub 원격 저장소 연결 및 Push 완료 (main 브랜치)
