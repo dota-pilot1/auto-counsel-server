@@ -1,0 +1,21 @@
+[왜 Domain Repository 인터페이스인가? (DIP 원칙)]
+
+현재 코드에서는 Service가 CounselMapper(인터페이스지만 기술적 구현체)를 직접 호출하고 있어, CounselRepository 인터페이스가 왜 필요한지 의문이 생길 수 있습니다. DDD와 클린 아키텍처 관점에서 이 인터페이스의 존재 이유는 다음과 같습니다.
+
+1. 계층 간의 결합도 낮추기 (DIP: 의존 역전 원칙)
+   - 만약 서비스가 CounselMapper를 직접 의존하면, 서비스는 "MyBatis"라는 특정 기술에 종속됩니다.
+   - 하지만 서비스가 Domain 계층의 CounselRepository(추상화된 인터페이스)를 의존하게 하면, 나중에 DB 기술을 JPA로 바꾸거나 외부 API 호출로 바꾸더라도 서비스 코드는 한 줄도 수정할 필요가 없습니다. 오직 인프라 계층의 구현체만 갈아끼우면 됩니다.
+
+2. 비즈니스 중심 설계
+   - Domain 계층은 시스템의 핵심입니다. "데이터를 어떻게 저장하느냐(SQL)"보다 "어떤 데이터를 조회할 수 있느냐(Interface)"가 비즈니스적으로 더 중요합니다.
+   - 인터페이스는 "이러한 기능이 도메인에 필요하다"라는 약속(Contract)입니다.
+
+3. 테스트의 용이성
+   - 단위 테스트를 작성할 때, 진짜 DB와 연결된 Mapper 없이도 인터페이스를 가짜(Mock)로 만들어 서비스 로직만 아주 가볍고 빠르게 테스트할 수 있습니다.
+
+[이후 개선 방향]
+현재는 Service -> CounselMapper(MyBatis)로 연결되어 있지만, 정석적으로는 다음과 같이 연결합니다.
+- 방법 A: CounselMapper가 CounselRepository를 상속(extends)받게 함.
+- 방법 B: CounselRepository를 구현하는 CounselRepositoryImpl 클래스를 만들고, 그 안에서 Mapper를 호출함.
+
+이렇게 하면 Service는 오직 Domain에 있는 Repository 인터페이스만 보고 일할 수 있게 됩니다.

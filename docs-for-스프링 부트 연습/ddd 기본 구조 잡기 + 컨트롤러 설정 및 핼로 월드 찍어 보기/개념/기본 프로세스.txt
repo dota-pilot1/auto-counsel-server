@@ -1,0 +1,29 @@
+[전체 프로세스 동작 흐름]
+
+네, 말씀하신 흐름이 정확합니다! 레이어드 아키텍처(DDD)의 표준적인 흐름은 다음과 같습니다.
+
+1. Controller (Interfaces)
+   - 역할: 외부 요청(HTTP) 수신 및 응답 반환
+   - 다음으로 전달: Service
+
+2. Service (Application)
+   - 역할: 비즈니스 로직 처리 및 트랜잭션 관리
+   - 다음으로전달: Repository (인터페이스)
+
+3. Repository (Domain Interface)
+   - 역할: 도메인 계층의 요구사항(약속) 정의
+   - 실제 동작: 이 인터페이스를 상속받은 구현체가 실행됨
+
+4. Mapper (Infrastructure Implementation)
+   - 역할: MyBatis가 생성한 실제 DB 통신 로직
+   - 실제 동작: Repository 인터페이스의 추상 메서드를 SQL로 구현함
+
+5. SQL (DB)
+   - 역할: 실제 데이터베이스 쿼리 실행
+
+[시각화]
+[Browser] -> Controller -> Service -> Repository (Interface)
+                                          ↑ (구현/상속)
+                                       Mapper (Proxy) -> [SQL/DB]
+
+이 구조 덕분에 서비스는 "어떤 기술(MyBatis)"로 데이터를 가져오는지 몰라도, "어떤 데이터(Repository)"를 가져올지만 생각하면 되므로 매우 깔끔한 설계가 됩니다.

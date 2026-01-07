@@ -1,0 +1,27 @@
+[데이터 흐름: Controller ~ SQL Mapper]
+
+스프링 부트와 MyBatis를 이용한 기본적인 데이터 조회 흐름은 다음과 같습니다.
+
+1. interfaces (Controller)
+   - 역할: 외부의 HTTP 요청을 가장 먼저 받습니다. (접점/창구)
+   - 클래스: CounselController
+   - 설명: `@GetMapping("/hello")`를 통해 브라우저 접속을 감지하고, 비즈니스 로직을 처리하는 Application Service를 호출합니다.
+
+2. application (Service)
+   - 역할: 비즈니스 로직의 흐름을 제어합니다. (지휘자)
+   - 클래스: CounselService
+   - 설명: Controller로부터 요청을 전달받아 필요한 도메인 로직을 수행하거나, DB 계층(Mapper)에 데이터를 요청합니다. 
+
+3. infrastructure (Persistence / Mapper)
+   - 역할: 실제 데이터베이스에 접속하여 SQL을 실행합니다. (실행원)
+   - 클래스: CounselMapper (인터페이스)
+   - 설명: `@Mapper` 어노테이션이 붙어 있으며, `@Select("SELECT message FROM counsels LIMIT 1")`를 통해 실제 SQL을 수행합니다. MyBatis가 이 인터페이스를 구현체로 만들어 실행 시점에 DB 쿼리를 수행합니다.
+
+4. domain (Model)
+   - 역할: 데이터를 담는 그릇이자 비즈니스의 핵심 개념입니다.
+   - 클래스: CounselMessage
+   - 설명: DB에서 가져온 결과(문자열 필드 등)를 자바 객체 형태로 변환하여 레이어 간에 전달할 때 사용됩니다.
+
+[요약된 실행 순서]
+사용자 요청(Browser) -> CounselController -> CounselService -> CounselMapper -> DB(PostgreSQL) 
+-> 데이터 반환 -> CounselMessage 객체 생성 -> Service -> Controller -> 사용자 응답(JSON)
