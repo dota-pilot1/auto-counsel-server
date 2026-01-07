@@ -1,0 +1,16 @@
+[프로젝트 시작 및 DB 설정 요약]
+
+1. PostgreSQL 데이터베이스 구축 (Docker Compose)
+   - 파일: docker-compose.yml
+   - 버전: postgres:15
+   - 포트 설정: 5434:5432 (5432, 5433 포트 충돌로 인해 5434 최종 사용)
+   - DB 정보: 사용자(user), 암호(password), 디비명(autocounsel)
+
+2. 스프링 부트 애플리케이션 설정
+   - 파일: src/main/resources/application.properties
+   - DB 연결: jdbc:postgresql://localhost:5434/autocounsel
+   - MyBatis 설정: 매퍼 위치(classpath:mapper/*.xml) 및 도메인 패키지 지정
+
+3. 실행 및 검증
+   - 명령어: ./gradlew bootRun
+   - 결과: 8099 포트에서 서버 정상 기동 및 DB 연결 확인 완료 (충돌 방지를 위해 8099 사용)

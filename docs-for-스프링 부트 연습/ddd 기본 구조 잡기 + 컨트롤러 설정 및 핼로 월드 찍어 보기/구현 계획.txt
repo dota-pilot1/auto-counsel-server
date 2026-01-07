@@ -1,0 +1,26 @@
+[DDD 기본 구조 잡기 + Hello World 구현 계획]
+
+1. 목표
+   - 제안된 4계층 아키텍처(domain, application, interfaces, infrastructure) 기반 프로젝트 구조 확립
+   - 결과: 8099 포트에서 서버 정상 기동 및 실제 DB 테이블(`counsels`) 조회를 통한 데이터 반환 확인 완료
+
+2. 아키텍처 구조 (패키지: io.opro.autocounsel)
+   - interfaces: Controller, DTO (외부 노출 API)
+   - application: Service, UseCase (비즈니스 로직 흐름 제어)
+   - domain: Model(Entity/VO), Repository interface (핵심 비즈니스 규칙 및 틀)
+   - infrastructure: Persistence(MyBatis), Repository 구현체 (기술적 세부 구현)
+
+3. 상세 구현 단계
+   1단계: 패키지 및 기본 클래스 생성
+     - domain.model.CounselMessage (도메인 모델)
+     - domain.repository.CounselRepository (인터페이스)
+     - application.service.CounselService
+     - interfaces.api.CounselController
+   2단계: 인프라 계층(MyBatis) 구현
+     - infrastructure.persistence.mybatis.CounselMapper (인터페이스)
+     - src/main/resources/mapper/CounselMapper.xml (SQL)
+   3단계: 실행 및 검증
+     - GET http://localhost:8099/hello 접속 확인
+
+4. 검증 방법
+   - 브라우저나 Postman으로 접속하여 DB 조회를 통한 Hello World 메시지 반환 확인
